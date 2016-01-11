@@ -24,7 +24,7 @@ namespace WebPortal.Controllers
             var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
             //string post_id = '"' + postID + '"';
 
-            PostInfo post = new PostInfo();
+            
             var collection = mongoDbServer.GetCollection<BsonDocument>("post");
             List<PostInfo> postInfo = new List<PostInfo>();
             var filter = new BsonDocument();
@@ -36,6 +36,7 @@ namespace WebPortal.Controllers
                     var batch = cursor.Current;
                     foreach (var item in batch)
                     {
+                        PostInfo post = new PostInfo();
                         post.id = item.GetElement("post_id").Value.ToInt32();
                         post.Title = item.GetElement("post_title").Value.ToString();
                         post.Author = item.GetElement("post_author").Value.ToString();

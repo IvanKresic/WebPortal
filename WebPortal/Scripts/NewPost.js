@@ -27,8 +27,9 @@ function newPost()
     postDataToDatabase(postInfo, newPostApiURL);
     //console.log(title + " " + author + " " + text + " " + picture);
     resetnewPost();
-    resetpostInfo();    
-    //getDataFromDatabase(newPostApiURL);
+    resetpostInfo();
+    document.getElementById('topTenPosts').innerHTML = "";
+    getDataFromDatabase(newPostApiURL);
     document.getElementById('addNewPost').style.display = "none";
         
 }
