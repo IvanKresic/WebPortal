@@ -19,10 +19,10 @@ function addNewPost()
 
 function newPost()
 {       
-    postInfo.title  += document.getElementById('title').value;
-    postInfo.author += document.getElementById('author').value;
-    postInfo.text  += document.getElementById('text').value;
-    postInfo.picture  += document.getElementById('picture').value;
+    postInfo.title   += document.getElementById('formTitle').value;
+    postInfo.author  += document.getElementById('formAuthor').value;
+    postInfo.text    += document.getElementById('formText').value;
+    postInfo.picture += document.getElementById('formPicture').value;
 
     postDataToDatabase(postInfo, newPostApiURL);
     //console.log(title + " " + author + " " + text + " " + picture);
@@ -78,7 +78,12 @@ function getDataFromDatabase(url) {
                     // postInfo.title += valid[i].Title;
                     // postInfo.text += valid[i].Text;
                     // postInfo.picture += valid[i].Picture;
-                    document.getElementById('topTenPosts').innerHTML += "<div id='title'>" + valid[i].Title + "</div><br/><div id='author'>" + valid[i].Author + "</div><br/><div id='picture'>" + valid[i].Picture + "</div><br/><div id='text'>" + valid[i].Text + "</div><br/>";
+                    document.getElementById('topTenPosts').innerHTML += "<div id='" 
+                        +valid[i].id + "' class='main_div'><div id='title'><b><h3>Title:</b> " 
+                        +valid[i].Title + "</h3></div><br/><div id='author'><b>Author:</b> " 
+                        +valid[i].Author + "</div><br/><div id='parent'><div id='picture'>" 
+                        +valid[i].Picture + "</div><br/><div id='text'><b>Text:</b> " 
+                        + valid[i].Text + "</div></div><br/><input type='text' class='input-sm' id=" + valid[i]._id + " style='width:350px;'><button onclick='newComment(" + valid[i]._id + ")'  class='btn' style='margin-left:5px;margin-top:-5px;'>Add comment</button></div>";
                     i++;
                     console.log(valid.length + "   i=" + i);
                 } while (valid.length > i);
@@ -93,10 +98,10 @@ function getDataFromDatabase(url) {
 
 //**************RESET FUNCTIONS****************
 function resetnewPost() {
-    document.getElementById('title').value = "";
-    document.getElementById('author').value = "";
-    document.getElementById('text').value = "";
-    document.getElementById('picture').value = "";
+    document.getElementById('formTitle').value= "";
+    document.getElementById('formAuthor').value = "";
+    document.getElementById('formText').value= "";
+    document.getElementById('formPicture').value = "";
 }
 
 function resetpostInfo()

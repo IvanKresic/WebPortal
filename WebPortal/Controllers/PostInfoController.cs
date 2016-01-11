@@ -37,6 +37,7 @@ namespace WebPortal.Controllers
                     foreach (var item in batch)
                     {
                         PostInfo post = new PostInfo();
+                        post._id = item.GetElement("_id").Value.ToString();
                         post.id = item.GetElement("post_id").Value.ToInt32();
                         post.Title = item.GetElement("post_title").Value.ToString();
                         post.Author = item.GetElement("post_author").Value.ToString();
@@ -75,5 +76,29 @@ namespace WebPortal.Controllers
             collection.InsertOneAsync(document);
 
         }
+
+        [HttpPost]
+        [Route("api/PostInfo/{_id}")]
+        public void Post(string id)
+        {
+            var mongoDbClient = new MongoClient("mongodb://127.0.0.1:27017");
+            var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
+
+            var document = new BsonDocument
+            {
+                { "post_id",  model.id  },
+                { "post_title",  model.Title  },
+                { "post_text",  model.Text  },
+                { "post_author",  model.Author  },
+                { "post_picture",  model.Picture  },
+               // { "post_comments", '"' + model.Comments + '"' },
+
+            };
+
+            var collection = mongoDbServer.GetCollection<BsonDocument>("post");
+            collection.InsertOneAsync(document);
+
+        }
+
     }
 }

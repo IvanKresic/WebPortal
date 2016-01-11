@@ -13,5 +13,46 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 400px;
+}
+
+.myForm
+{
+    width:400px;
+}
+#formTitle, #formAuthor, #formPicture, #formText{
+    width:400px;
+}
+
+.main_div{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+#author{
+    font-size:12px;
+    background-color:blue;
+    margin-top:-25px;
+}
+#title{
+    background-color:aqua;
+}
+
+#parent{
+    display:flex;
+}
+
+#picture{
+    background-color:red;
+    float:left;
+    width:200px;
+    height:200px;
+    display:inline;
+    margin-right:10px;
+}
+
+#text{
+    background-color:greenyellow;   
+    display:inline;
+    flex:1;
 }
