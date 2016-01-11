@@ -79,13 +79,14 @@ function getDataFromDatabase(url) {
                     // postInfo.text += valid[i].Text;
                     // postInfo.picture += valid[i].Picture;
                     document.getElementById('topTenPosts').innerHTML += "<div id='" 
-                        +valid[i].id + "' class='main_div'><div id='title'><b><h3>Title:</b> " 
-                        +valid[i].Title + "</h3></div><br/><div id='author'><b>Author:</b> " 
-                        +valid[i].Author + "</div><br/><div id='parent'><div id='picture'>" 
-                        +valid[i].Picture + "</div><br/><div id='text'><b>Text:</b> " 
-                        + valid[i].Text + "</div></div><br/><input type='text' class='input-sm' id=" + valid[i]._id + " style='width:350px;'><button onclick='newComment(" + valid[i]._id + ")'  class='btn' style='margin-left:5px;margin-top:-5px;'>Add comment</button></div>";
+                        + valid[i].id + "' class='main_div'><div id='title'><b><h3>Title:</b> " 
+                        + valid[i].Title + "</h3></div><br/><div id='author'><b>Author:</b> " 
+                        + valid[i].Author + "</div><br/><div id='parent'><div id='picture'>" 
+                        + valid[i].Picture + "</div><br/><div id='text'><b>Text:</b> " 
+                        + valid[i].Text + "</div></div><br/><input type='text' class='input-sm' id="
+                        + valid[i]._id + " style='width:350px;'><button onclick='newComment(" +'"'+ valid[i]._id +'"'+ ")' class='btn' style='margin-left:5px;margin-top:-5px;'>Add comment</button></div>";
                     i++;
-                    console.log(valid.length + "   i=" + i);
+                    //console.log(valid.length + "   i=" + i);
                 } while (valid.length > i);
             } else {
                 console.log("GET DAMN" + valid);
@@ -95,6 +96,20 @@ function getDataFromDatabase(url) {
 }
 //********************************************
 
+var comment =
+    {
+        id: "",
+        comment:""
+}
+
+function newComment(id)
+{
+    var test = document.getElementById(id).value;
+    comment.id += id;
+    comment.comment += test;    
+    var newCommentUrl = 'api/PostInfo/' + comment;
+    postDataToDatabase(comment, newCommentUrl);
+}
 
 //**************RESET FUNCTIONS****************
 function resetnewPost() {

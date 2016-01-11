@@ -43,6 +43,7 @@ namespace WebPortal.Controllers
                         post.Author = item.GetElement("post_author").Value.ToString();
                         post.Text = item.GetElement("post_text").Value.ToString();
                         post.Picture = item.GetElement("post_picture").Value.ToString();
+                        //post.Comments = item.GetElement("post_comments").Value.ToString();
                         postInfo.Add(post);
                         count++;
                     }
@@ -63,41 +64,34 @@ namespace WebPortal.Controllers
 
             var document = new BsonDocument
             {
+                //{ "post_ID",  model._id.ToString()  },
                 { "post_id",  model.id  },
                 { "post_title",  model.Title  },
                 { "post_text",  model.Text  },
                 { "post_author",  model.Author  },
                 { "post_picture",  model.Picture  },
-               // { "post_comments", '"' + model.Comments + '"' },
-
+                //{ "post_comments",  model.Comments  },
             };
 
             var collection = mongoDbServer.GetCollection<BsonDocument>("post");
             collection.InsertOneAsync(document);
-
         }
 
         [HttpPost]
-        [Route("api/PostInfo/{_id}")]
-        public void Post(string id)
+        [Route("api/PostInfo/{Comment}")]
+        public async void Post(Comment comment)
         {
             var mongoDbClient = new MongoClient("mongodb://127.0.0.1:27017");
             var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
-
-            var document = new BsonDocument
-            {
-                { "post_id",  model.id  },
-                { "post_title",  model.Title  },
-                { "post_text",  model.Text  },
-                { "post_author",  model.Author  },
-                { "post_picture",  model.Picture  },
-               // { "post_comments", '"' + model.Comments + '"' },
-
-            };
-
             var collection = mongoDbServer.GetCollection<BsonDocument>("post");
-            collection.InsertOneAsync(document);
+            var filter = Builders<PostInfo>.Filter.Eq(e => e._id, comment.id);
 
+            var update = Builders<PostInfo>.Update.Push<string>(e => e.Comments, comment.comment);
+            await collection.FindOneAndUpdateAsync(filter, update);
+
+            //***********
+            //***********
+            //await collection.Update(Query.EQ("_id", temp[0]), Update.Push("komentar", temp[1]));
         }
 
     }

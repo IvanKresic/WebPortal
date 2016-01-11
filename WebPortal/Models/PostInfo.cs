@@ -22,6 +22,6 @@ namespace WebPortal.Models
 
         public string Picture { get; set; }
 
-        public string Comments { get; set; }
+        public List<string> Comments { get; set; }
     }
 }
