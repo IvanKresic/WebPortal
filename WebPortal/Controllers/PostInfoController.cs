@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using System.Web.Script.Serialization;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WebPortal.Controllers
 {
@@ -29,6 +30,7 @@ namespace WebPortal.Controllers
             List<PostInfo> postInfo = new List<PostInfo>();
             var filter = new BsonDocument();
             var count = 0;
+            var k = 0;
             using (var cursor = await collection.FindAsync(filter))
             {
                 while (await cursor.MoveNextAsync())
@@ -38,12 +40,11 @@ namespace WebPortal.Controllers
                     {
                         PostInfo post = new PostInfo();
                         post._id = item.GetElement("_id").Value.ToString();
-                        post.id = item.GetElement("post_id").Value.ToInt32();
                         post.Title = item.GetElement("post_title").Value.ToString();
                         post.Author = item.GetElement("post_author").Value.ToString();
                         post.Text = item.GetElement("post_text").Value.ToString();
                         post.Picture = item.GetElement("post_picture").Value.ToString();
-                        //post.Comments = item.GetElement("post_comments").Value.ToString();
+                        post.Comments = item["post_comments"].AsBsonArray.Select(p => p.AsString).ToArray();
                         postInfo.Add(post);
                         count++;
                     }
@@ -63,14 +64,13 @@ namespace WebPortal.Controllers
             var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
 
             var document = new BsonDocument
-            {
-                //{ "post_ID",  model._id.ToString()  },
-                { "post_id",  model.id  },
+            {               
+                //{ "post_id",  model.id  },
                 { "post_title",  model.Title  },
                 { "post_text",  model.Text  },
                 { "post_author",  model.Author  },
                 { "post_picture",  model.Picture  },
-                //{ "post_comments",  model.Comments  },
+                { "post_comments",  new BsonArray()  },
             };
 
             var collection = mongoDbServer.GetCollection<BsonDocument>("post");
@@ -79,19 +79,26 @@ namespace WebPortal.Controllers
 
         [HttpPost]
         [Route("api/PostInfo/{Comment}")]
-        public async void Post(Comment comment)
+        public async Task Post(Comment comment)
         {
-            var mongoDbClient = new MongoClient("mongodb://127.0.0.1:27017");
-            var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
-            var collection = mongoDbServer.GetCollection<BsonDocument>("post");
-            var filter = Builders<PostInfo>.Filter.Eq(e => e._id, comment.id);
+            try {
+                BsonObjectId oldId = new BsonObjectId(new ObjectId(comment.id.ToString()));
+                var temp = oldId.GetType();
+                temp.GetType();
+                var mongoDbClient = new MongoClient("mongodb://127.0.0.1:27017");
+                var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
+                var collection = mongoDbServer.GetCollection<PostInfo>("post");
 
-            var update = Builders<PostInfo>.Update.Push<string>(e => e.Comments, comment.comment);
-            await collection.FindOneAndUpdateAsync(filter, update);
-
-            //***********
-            //***********
-            //await collection.Update(Query.EQ("_id", temp[0]), Update.Push("komentar", temp[1]));
+                var filter = Builders<PostInfo>.Filter.Eq("_id", oldId);
+                var update = Builders<PostInfo>.Update.Push("post_comments", comment.comment);
+                await collection.FindOneAndUpdateAsync(filter, update);
+                var test = oldId.GetType();
+            }
+            catch
+            {
+                var yolo = "you only live once";
+                yolo.GetType();
+            }
         }
 
     }

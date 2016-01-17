@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebPortal.Models
 {
     public class PostInfo
     {
+       // [BsonId]
         public object _id { get; set; }
 
-        public int id { get; set; }
+        //public int id { get; set; }
 
         public string Title { get; set; }
 
@@ -22,6 +24,6 @@ namespace WebPortal.Models
 
         public string Picture { get; set; }
 
-        public List<string> Comments { get; set; }
+        public string[] Comments { get; set; }
     }
 }
