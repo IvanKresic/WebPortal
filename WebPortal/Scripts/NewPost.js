@@ -6,6 +6,7 @@ var postInfo =
         author: "",
         text: "",
         picture: "",
+        date:""
     }
 
 getDataFromDatabase(newPostApiURL);
@@ -21,7 +22,9 @@ function newPost()
     postInfo.title   += document.getElementById('formTitle').value;
     postInfo.author  += document.getElementById('formAuthor').value;
     postInfo.text    += document.getElementById('formText').value;
-    postInfo.picture += document.getElementById('formPicture').value;
+    var temp = document.getElementById('formPicture').value;
+    var fileName = temp.match(/[^\/\\]+$/);
+    postInfo.picture += fileName[0];
 
     postDataToDatabase(postInfo, newPostApiURL);
     //console.log(title + " " + author + " " + text + " " + picture);
@@ -79,8 +82,8 @@ function getDataFromDatabase(url) {
                     // postInfo.picture += valid[i].Picture;
                     document.getElementById('topTenPosts').innerHTML += "<div id='' class='main_div' style='margin-top:50px;'><div id='title'><b><h2> "
                                                                          + valid[i].Title + "</b></h2></div><br/><div id='author'><b>Author:</b> "
-                                                                         + valid[i].Author + "</div><br/><div id='parent'><div id='picture'>"
-                                                                         + valid[i].Picture + "</div><br/><div id='text'><b>Text:</b> "
+                                                                         + valid[i].Author + "</br>"+ valid[i].Date +"</div><br/><div id='parent'><div id='picture'><img src='nmbp1/"
+                                                                         + valid[i].Picture + "'></div><br/><div id='text'><b>Text:</b> "
                                                                          + valid[i].Text + "</div></div></div><ul id='comments'><div id='c" + valid[i]._id + "'>";
                     console.log(valid[i]._id);
                     valid[i].Comments.forEach(function (data) {

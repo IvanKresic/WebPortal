@@ -194,6 +194,11 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="nmbp1\10631125_10204687769293488_5253496126651869788_o.jpg" />
+    <Content Include="nmbp1\1508535_1036783353009342_2991083751217842002_n.jpg" />
+    <Content Include="nmbp1\1625598_10151996588696840_1791295954_n.jpg" />
+    <Content Include="nmbp1\487585_606864272657813_1677152393_n.jpg" />
+    <Content Include="nmbp1\a0Y4NZZ_700b.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />

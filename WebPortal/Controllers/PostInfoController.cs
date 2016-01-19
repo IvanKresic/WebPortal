@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace WebPortal.Controllers
 {
@@ -31,8 +32,9 @@ namespace WebPortal.Controllers
             var filter = new BsonDocument();
             var count = 0;
             var k = 0;
-            using (var cursor = await collection.FindAsync(filter))
+            using (var cursor = await collection.Find(filter).Sort("post").Ascending("post_date").Limit(10))
             {
+                
                 while (await cursor.MoveNextAsync())
                 {
                     var batch = cursor.Current;
@@ -45,6 +47,7 @@ namespace WebPortal.Controllers
                         post.Text = item.GetElement("post_text").Value.ToString();
                         post.Picture = item.GetElement("post_picture").Value.ToString();
                         post.Comments = item["post_comments"].AsBsonArray.Select(p => p.AsString).ToArray();
+                        post.Date = item.GetElement("post_date").Value.ToString();
                         postInfo.Add(post);
                         count++;
                     }
@@ -62,7 +65,8 @@ namespace WebPortal.Controllers
         {
             var mongoDbClient = new MongoClient("mongodb://127.0.0.1:27017");
             var mongoDbServer = mongoDbClient.GetDatabase("nmbp");
-
+            DateTime date = DateTime.Now;
+            
             var document = new BsonDocument
             {               
                 //{ "post_id",  model.id  },
@@ -70,6 +74,7 @@ namespace WebPortal.Controllers
                 { "post_text",  model.Text  },
                 { "post_author",  model.Author  },
                 { "post_picture",  model.Picture  },
+                { "post_date", date.ToString("dd-MM-yyyy") },
                 { "post_comments",  new BsonArray()  },
             };
 
